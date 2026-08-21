@@ -1,0 +1,4 @@
+apiVersion = "agentic-engineer/v1"
+name = "employees-submit-expensemm1"
+createdAt = "2026-08-21T07:24:18Z"
+idea = "Employees submit expense claims, managers approve them, and finance exports approved claims to payroll"
