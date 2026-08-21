@@ -1,0 +1,19 @@
+title Expense Claims & Payroll Export
+
+component expense-webapp as "Expense Claims Webapp" web-application
+component expense-api as "Expense Claims API" service
+component expense-db as "Expense Claims DB" database
+component receipts-store as "Receipts Object Store" database
+
+east user-auth as "Thunder Auth" identity-server
+south email-provider as "Email Provider" service
+
+north -> expense-webapp
+
+expense-webapp -> expense-api
+expense-webapp -> user-auth
+
+expense-api -> expense-db
+expense-api -> receipts-store
+expense-api -> user-auth
+expense-api -> email-provider
