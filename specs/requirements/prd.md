@@ -29,24 +29,24 @@ them as a file for payroll processing.
 ## User Stories
 
 1. As an employee, I want to submit an expense claim with an amount, category,
- description, and a receipt attachment, so that my manager has everything
- needed to review it.
+description, and a receipt attachment, so that my manager has everything
+needed to review it.
 2. As an employee, I want to see the status of my submitted claims (pending,
- approved, rejected), so that I know where my reimbursement stands.
+approved, rejected), so that I know where my reimbursement stands.
 3. As an employee, I want to be notified by email when my claim is approved or
- rejected, so that I don't have to keep checking the app.
+rejected, so that I don't have to keep checking the app.
 4. As a manager, I want to see a list of expense claims submitted by my team
- awaiting my review, so that I can act on them.
+awaiting my review, so that I can act on them.
 5. As a manager, I want to be notified by email when a new claim is submitted
- to me, so that I know to review it promptly.
+to me, so that I know to review it promptly.
 6. As a manager, I want to approve or reject a claim, optionally with a
- comment, so that the employee understands the decision.
+comment, so that the employee understands the decision.
 7. As finance, I want to see all approved claims that haven't yet been
- exported, so that I know what's ready for payroll.
+exported, so that I know what's ready for payroll.
 8. As finance, I want to export a batch of approved claims as a downloadable
- file (CSV/Excel), so that I can upload it into our payroll system.
+file (CSV/Excel), so that I can upload it into our payroll system.
 9. As finance, I want exported claims to be marked as exported, so that they
- are not accidentally exported twice.
+are not accidentally exported twice.
 
 ## Product Decisions
 
