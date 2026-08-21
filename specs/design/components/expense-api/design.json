@@ -12,11 +12,11 @@
     { "kind": "platform-resource", "name": "expense-db", "resourceType": "postgres-cnpg", "description": "Stores employees, expense claims, line items, approvals, and export batches." },
     { "kind": "platform-resource", "name": "receipts-store", "resourceType": "object-storage", "description": "Stores uploaded receipt files (image/PDF) attached to expense claims." },
     { "kind": "platform-resource", "name": "user-auth", "resourceType": "thunder-app", "parameters": { "scopes": "openid profile email" }, "description": "Validates signed-in caller tokens issued by Thunder and resolves employee/manager/finance role for authorization." },
-    { "kind": "external", "name": "email-provider", "description": "Sends transactional email notifications on claim submission (to manager) and approval/rejection (to employee). No fixed provider signalled by the requirements.",
-      "candidates": [
-        { "style": "sdk", "package": "npm:@sendgrid/mail@^8", "name": "sendgrid" },
-        { "style": "rest-api", "name": "postmark" },
-        { "style": "sdk", "package": "npm:resend@^3", "name": "resend" }
+    { "kind": "external", "name": "email-provider", "style": "sdk", "package": "npm:@sendgrid/mail@^8",
+      "description": "Sends transactional email notifications via SendGrid on claim submission (to manager) and approval/rejection (to employee).",
+      "config": [
+        { "key": "SENDGRID_API_KEY", "secret": true, "description": "SendGrid API key used to authenticate outbound email sends." },
+        { "key": "SENDGRID_FROM_EMAIL", "description": "Verified sender email address notifications are sent from." }
       ] }
   ],
   "description": "Ballerina REST API owning expense claim lifecycle: submission with receipt upload, manager approval/rejection, and finance's approved-but-unexported list and CSV/Excel export. Enforces single-level manager approval and marks exported claims to prevent double export. Does not integrate directly with any payroll provider — export is a downloadable file only.",
