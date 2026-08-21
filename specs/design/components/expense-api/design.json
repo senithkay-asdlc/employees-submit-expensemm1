@@ -7,18 +7,92 @@
   "appPath": "expense-api",
   "entrypoint": "deployment/service",
   "exposure": "internet",
-  "stories": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-  "dependencies": [
-    { "kind": "platform-resource", "name": "expense-db", "resourceType": "postgres-cnpg", "description": "Stores employees, expense claims, line items, approvals, and export batches." },
-    { "kind": "platform-resource", "name": "receipts-store", "resourceType": "object-storage", "description": "Stores uploaded receipt files (image/PDF) attached to expense claims." },
-    { "kind": "platform-resource", "name": "user-auth", "resourceType": "thunder-app", "parameters": { "scopes": "openid profile email" }, "description": "Validates signed-in caller tokens issued by Thunder and resolves employee/manager/finance role for authorization." },
-    { "kind": "external", "name": "email-provider", "style": "sdk", "package": "npm:@sendgrid/mail@^8",
-      "description": "Sends transactional email notifications via SendGrid on claim submission (to manager) and approval/rejection (to employee).",
-      "config": [
-        { "key": "SENDGRID_API_KEY", "secret": true, "description": "SendGrid API key used to authenticate outbound email sends." },
-        { "key": "SENDGRID_FROM_EMAIL", "description": "Verified sender email address notifications are sent from." }
-      ] }
+  "stories": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
   ],
   "description": "Ballerina REST API owning expense claim lifecycle: submission with receipt upload, manager approval/rejection, and finance's approved-but-unexported list and CSV/Excel export. Enforces single-level manager approval and marks exported claims to prevent double export. Does not integrate directly with any payroll provider — export is a downloadable file only.",
-  "skillsPinned": ["openapi-conventions", "ballerina", "api-management", "thunder-authentication"]
+  "dependencies": [
+    {
+      "kind": "platform-resource",
+      "name": "expense-db",
+      "description": "Stores employees, expense claims, line items, approvals, and export batches.",
+      "resourceType": "postgres-cnpg",
+      "wiring": {
+        "ref": "employees-submit-402e32d5",
+        "envBindings": {
+          "dbname": "EXPENSE_DB_DBNAME",
+          "host": "EXPENSE_DB_HOST",
+          "password": "EXPENSE_DB_PASSWORD",
+          "port": "EXPENSE_DB_PORT",
+          "user": "EXPENSE_DB_USER"
+        }
+      }
+    },
+    {
+      "kind": "platform-resource",
+      "name": "receipts-store",
+      "description": "Stores uploaded receipt files (image/PDF) attached to expense claims.",
+      "resourceType": "object-storage"
+    },
+    {
+      "kind": "platform-resource",
+      "name": "user-auth",
+      "description": "Validates signed-in caller tokens issued by Thunder and resolves employee/manager/finance role for authorization.",
+      "resourceType": "thunder-app",
+      "parameters": {
+        "scopes": "openid profile email"
+      },
+      "wiring": {
+        "ref": "employees-submit-d7338098",
+        "envBindings": {
+          "client_id": "USER_AUTH_CLIENT_ID",
+          "issuer": "USER_AUTH_ISSUER",
+          "jwks_url": "USER_AUTH_JWKS_URL",
+          "scopes": "USER_AUTH_SCOPES"
+        }
+      }
+    },
+    {
+      "kind": "external",
+      "name": "email-provider",
+      "description": "Sends transactional email notifications via SendGrid on claim submission (to manager) and approval/rejection (to employee).",
+      "style": "sdk",
+      "package": "npm:@sendgrid/mail@^8",
+      "config": [
+        {
+          "key": "SENDGRID_API_KEY",
+          "secret": true,
+          "description": "SendGrid API key used to authenticate outbound email sends."
+        },
+        {
+          "key": "SENDGRID_FROM_EMAIL",
+          "description": "Verified sender email address notifications are sent from."
+        }
+      ],
+      "wiring": {
+        "ref": "employees-submit-1679d436",
+        "envBindings": {
+          "SENDGRID_API_KEY": "SENDGRID_API_KEY",
+          "SENDGRID_FROM_EMAIL": "SENDGRID_FROM_EMAIL"
+        }
+      }
+    }
+  ],
+  "exposesAPI": {
+    "auth": "end-user-required"
+  },
+  "skillsPinned": [
+    "openapi-conventions",
+    "ballerina",
+    "api-management",
+    "thunder-authentication"
+  ]
 }
